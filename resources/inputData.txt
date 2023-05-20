@@ -1,0 +1,4 @@
+Ronaldo | Cristiano | 60000.0 | 7 | 400 | 200 | Attaquant | 16 | 13/12/2001
+Messi | Lionel | 50000.0 | 10 | 1500 | 70 | milieu | 18 | 13/12/2001
+Nakkach | Ibrahim | 20.0 | 6 | 1000 | 20 | Milieu | 18 | 13/12/2001
+Reus | Marco | 20.0 | 6 | 1000 | 20 | Milieu | 18 | 13/12/2001

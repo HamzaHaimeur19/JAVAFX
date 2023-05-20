@@ -1,0 +1,23 @@
+CREATE TABLE equipe (
+    id INT PRIMARY KEY, 
+    nomEquipe VARCHAR(50)
+);
+
+CREATE TABLE joueur (
+    id INT PRIMARY KEY, 
+    nom VARCHAR(50), 
+    prenom VARCHAR(50), 
+    salaire DOUBLE, 
+    numero INT, 
+    matchs INT, 
+    buts INT, 
+    poste VARCHAR(50), 
+    club INT REFERENCES equipe(id), 
+    dateNaissance DATE
+);
+
+CREATE TABLE User (
+  id INT PRIMARY KEY,
+  email varchar(100),
+  password varchar(500)
+);

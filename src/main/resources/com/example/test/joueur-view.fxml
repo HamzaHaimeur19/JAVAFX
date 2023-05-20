@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<HBox alignment="CENTER" prefHeight="259.0" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.test.JoueurController">
+
+    <VBox alignment="CENTER" spacing="20">
+        <GridPane alignment="CENTER" hgap="10" vgap="10">
+            <Label text="Ajouter" style="-fx-font-size: 24px; -fx-font-weight: bold;" GridPane.columnIndex="0"
+                   GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+            <TextField promptText="NOM" fx:id="nomField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <TextField promptText="PRENOM" fx:id="prenomField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <TextField promptText="SALAIRE" fx:id="salaireField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <TextField promptText="NUMERO" fx:id="numeroField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            <TextField promptText="MATCHS" fx:id="matchField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            <TextField promptText="BUTS" fx:id="butsField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <TextField promptText="POSTE" fx:id="posteField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+            <!--<TextField fx:id="equipeField" GridPane.columnIndex="1" GridPane.rowIndex="8"/>!-->
+            <ComboBox fx:id="equipeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="Sélectionnez une équipe"/>
+            <TextField  promptText="aaaa-MM-dd" fx:id="dateField" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+            <Button text="Ajouter" GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2" onAction="#addJoueur"/>
+        </GridPane>
+    </VBox>
+
+    <VBox alignment="CENTER" spacing="20">
+        <GridPane alignment="CENTER" hgap="10" vgap="10">
+            <Label text="Modifier" style="-fx-font-size: 24px; -fx-font-weight: bold;" GridPane.columnIndex="0"
+                   GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+            <TextField fx:id="ModifiernomField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <TextField fx:id="ModifierprenomField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <TextField fx:id="ModifiersalaireField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <TextField fx:id="ModifiernumeroField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            <TextField fx:id="ModifiermatchField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            <TextField fx:id="ModifierbutsField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <TextField fx:id="ModifierposteField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+            <!--<TextField fx:id="equipeField" GridPane.columnIndex="1" GridPane.rowIndex="8"/>!-->
+            <ComboBox fx:id="ModifierequipeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="Sélectionnez une équipe"/>
+            <TextField promptText="aaaa-MM-dd" fx:id="ModifierdateField" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+            <Button text="Modifier" GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2" onAction="#modifierJoueur"/>
+        </GridPane>
+    </VBox>
+
+    <VBox alignment="CENTER" spacing="20">
+        <Label fx:id="welcomeText"/>
+        <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des joueurs"/>
+        <TableView fx:id="joueurTable">
+            <columns>
+                <TableColumn fx:id="columnJoueurId" text="ID"/>
+                <TableColumn fx:id="columnJoueurNom" text="Nom"/>
+                <TableColumn fx:id="columnJoueurPrenom" text="Prenom"/>
+                <TableColumn fx:id="columnJoueurSalaire" text="Salaire"/>
+                <TableColumn fx:id="columnJoueurNumero" text="Numero"/>
+                <TableColumn fx:id="columnJoueurMatch" text="Match"/>
+                <TableColumn fx:id="columnJoueurButs" text="Buts"/>
+                <TableColumn fx:id="columnJoueurPoste" text="Poste"/>
+                <TableColumn fx:id="columnJoueurClub" text="Club"/>
+                <TableColumn fx:id="columnJoueurDN" text="Date de Naissance"/>
+                <TableColumn fx:id="deleteButtonColumn" text="Supprimer"/>
+                <TableColumn fx:id="updateButtonColumn" text="Selectionner"/>
+            </columns>
+        </TableView>
+        <Button fx:id="goToEquipe" text="Liste des equipes" onAction="#EquipeHandler"/>
+    </VBox>
+</HBox>
