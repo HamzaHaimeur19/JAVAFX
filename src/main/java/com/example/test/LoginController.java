@@ -29,7 +29,7 @@ public class LoginController {
         String password = passwordField.getText();
 
         try {
-            // etabli
+            // etablir connexion
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/equipejoueur", "root", "");
 
             // requette sql
@@ -41,7 +41,7 @@ public class LoginController {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                messageLabel.setText("Login successful!");
+                //messageLabel.setText("Login successful!");
 
                 // fermer fenetre de login
                 Stage stage = (Stage) emailField.getScene().getWindow();
@@ -51,7 +51,7 @@ public class LoginController {
                 HelloApplication.navigateToEquipe();
             } else {
                 // Message d'erreur si aucun utilisateur n'est trouvé
-                messageLabel.setText("Invalid username or password");
+                messageLabel.setText("EMAIL OU MDP INVALIDES");
             }
 
             // fermer resources

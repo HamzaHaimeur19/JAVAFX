@@ -24,9 +24,6 @@ public class EquipeController {
     private Label welcomeText;
 
     @FXML
-    private Button goToJoueur;
-
-    @FXML
     private TableView<Equipe> equipeTable;
 
     @FXML
@@ -43,11 +40,7 @@ public class EquipeController {
     @FXML
     private TableColumn<Equipe, Void> updateButtonColumn;
 
-    @FXML
-    private TextField nomModifierField;
     EquipeService equipeService = new EquipeService();
-    Equipe selectedEquipe;
-
     public void initialize() {
         EquipeService equipeService = new EquipeService();
 
@@ -94,7 +87,7 @@ public class EquipeController {
             {
                 updateButton.setOnAction(event -> {
                     Equipe equipe = getTableView().getItems().get(getIndex());
-                    nomModifierField.setText(equipe.getNomEquipe());
+                    nomField.setText(equipe.getNomEquipe());
                 });
             }
 
@@ -113,6 +106,8 @@ public class EquipeController {
 
     @FXML
     private void navigateToJoueur() {
+        Stage stage = (Stage) nomField.getScene().getWindow();
+        stage.close();
         HelloApplication.navigateToJoueur();
     }
 
@@ -125,36 +120,30 @@ public class EquipeController {
             return;
         }
 
-        Equipe equipe = new Equipe(0, nom);
-        equipeService.save(equipe);
-
-        nomField.clear();
-        equipeTable.getItems().add(equipe);
-    }
-
-    @FXML
-    void modifierEquipe() {
         Equipe equipe = equipeTable.getSelectionModel().getSelectedItem();
 
         if (equipe == null) {
-            showAlert("Veuillez sélectionner une équipe");
-            return;
+            equipe = new Equipe(0, nom);
+            equipeService.save(equipe);
+            equipeTable.getItems().add(equipe);
+        } else {
+            String newNom = nomField.getText().trim();
+
+            if (newNom.isEmpty()) {
+                showAlert("Nom d'équipe requis");
+                return;
+            }
+
+            equipe.setNomEquipe(newNom);
+            equipeService.update(equipe);
+            equipeTable.getSelectionModel().clearSelection();
+            equipeTable.refresh();
+
         }
 
-        String newNom = nomModifierField.getText().trim();
+        nomField.clear();
 
-        if (newNom.isEmpty()) {
-            showAlert("Nom d'équipe requis");
-            return;
-        }
-
-        equipe.setNomEquipe(newNom);
-        equipeService.update(equipe);
-
-        equipeTable.refresh();
-        }
-
-
+    }
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Avertissement");

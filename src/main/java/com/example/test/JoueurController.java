@@ -73,8 +73,6 @@ public class JoueurController {
     @FXML
     private TextField posteField;
 
-    /*@FXML
-    private TextField equipeField;*/
 
     @FXML
     private TextField dateField;
@@ -87,23 +85,6 @@ public class JoueurController {
 
     @FXML
     private ComboBox<String> equipeComboBox;
-
-    @FXML
-    private TextField ModifiernomField;
-    @FXML
-    private TextField ModifierprenomField;
-    @FXML
-    private TextField ModifiersalaireField;
-    @FXML
-    private TextField ModifiernumeroField;
-    @FXML
-    private TextField ModifiermatchField;
-    @FXML
-    private TextField ModifierbutsField;
-    @FXML
-    private TextField ModifierposteField;
-    @FXML
-    private TextField ModifierdateField;
     @FXML
     private ComboBox ModifierequipeComboBox;
 
@@ -113,10 +94,6 @@ public class JoueurController {
         List<Equipe> equipeList = equipeService.findAll();
         for (Equipe equipe : equipeList) {
             equipeComboBox.getItems().add(equipe.getNomEquipe());
-        }
-
-        for (Equipe equipe : equipeList) {
-            ModifierequipeComboBox.getItems().add(equipe.getNomEquipe());
         }
 
         // colonnes des tables
@@ -155,6 +132,7 @@ public class JoueurController {
                     joueurService.remove(joueur);
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -171,20 +149,20 @@ public class JoueurController {
 
             {
                 updateButton.setOnAction(event -> {
-                    Joueur joueur= getTableView().getItems().get(getIndex());
-                    ModifiernomField.setText(joueur.getNom());
-                    ModifierprenomField.setText(joueur.getPrenom());
-                    ModifiersalaireField.setText(String.valueOf(joueur.getSalaire()));
-                    ModifiernumeroField.setText(String.valueOf(joueur.getNumero()));
-                    ModifiermatchField.setText(String.valueOf(joueur.getMatchs()));
-                    ModifierbutsField.setText(String.valueOf(joueur.getButs()));
-                    ModifierposteField.setText(joueur.getPoste());
+                    Joueur joueur = getTableView().getItems().get(getIndex());
+                    nomField.setText(joueur.getNom());
+                    prenomField.setText(joueur.getPrenom());
+                    salaireField.setText(String.valueOf(joueur.getSalaire()));
+                    numeroField.setText(String.valueOf(joueur.getNumero()));
+                    matchField.setText(String.valueOf(joueur.getMatchs()));
+                    butsField.setText(String.valueOf(joueur.getButs()));
+                    posteField.setText(joueur.getPoste());
                     if (joueur.getEquipe() == null) {
-                        ModifierequipeComboBox.getSelectionModel().clearSelection();
+                        equipeComboBox.getSelectionModel().clearSelection();
                     } else {
-                        ModifierequipeComboBox.getSelectionModel().select(joueur.getEquipe().getNomEquipe());
+                        equipeComboBox.getSelectionModel().select(joueur.getEquipe().getNomEquipe());
                     }
-                    ModifierdateField.setText(String.valueOf(joueur.getDateNaissance()));
+                    dateField.setText(String.valueOf(joueur.getDateNaissance()));
 
                 });
             }
@@ -204,6 +182,8 @@ public class JoueurController {
 
     @FXML
     private void EquipeHandler() {
+        Stage stage = (Stage) nomField.getScene().getWindow();
+        stage.close();
         HelloApplication.navigateToEquipe();
     }
 
@@ -238,11 +218,10 @@ public class JoueurController {
             poste = posteField.getText();
             dateNaissance = Date.valueOf(dateField.getText());
         } catch (NumberFormatException e) {
-            showAlert("Erreur de saisie", "Les valeurs numériques doivent être valides.");
+            showAlert("Erreur de saisie", "Les valeurs numériques / date doivent être valides.");
             return;
         }
 
-        // avoir equipe par nom selectionné
         String equipeN = equipeComboBox.getSelectionModel().getSelectedItem();
 
         Equipe equipe = equipeService.findByName(equipeN);
@@ -252,36 +231,17 @@ public class JoueurController {
             return;
         }
 
-        Joueur joueur = new Joueur(0, nom, prenom, salaire, numero, matchs, buts, poste, equipe, dateNaissance);
-
-        joueurService.save(joueur);
-
-        // Clear the fields
-        nomField.clear();
-        prenomField.clear();
-        salaireField.clear();
-        numeroField.clear();
-        matchField.clear();
-        butsField.clear();
-        posteField.clear();
-        dateField.clear();
-        equipeComboBox.getSelectionModel().clearSelection();
-
-        // Rafraichir
-        joueurTable.getItems().add(joueur);
-    }
-
-    @FXML
-    void modifierJoueur() {
-        JoueurService joueurService = new JoueurService();
-        EquipeService equipeService = new EquipeService();
-
-        // joueur selectionné
         Joueur joueur = joueurTable.getSelectionModel().getSelectedItem();
 
-        if (joueur != null) {
-            String newNom = ModifiernomField.getText();
-            String newPrenom = ModifierprenomField.getText();
+        if (joueur == null) {
+            // No selected item, create a new one
+            joueur = new Joueur(0, nom, prenom, salaire, numero, matchs, buts, poste, equipe, dateNaissance);
+            joueurService.save(joueur);
+            joueurTable.getItems().add(joueur);
+        } else {
+            // Selected item exists, modify it
+            String newNom = nomField.getText();
+            String newPrenom = prenomField.getText();
             double newSalaire;
             int newNumero;
             int newMatchs;
@@ -289,28 +249,27 @@ public class JoueurController {
             String newPoste;
             Date newDateNaissance;
 
-            // Checker pour valeurs nulls
-            if (newNom.isEmpty() || newPrenom.isEmpty() || ModifiersalaireField.getText().isEmpty() ||
-                    ModifiernumeroField.getText().isEmpty() || ModifiermatchField.getText().isEmpty() ||
-                    ModifierbutsField.getText().isEmpty() || ModifierposteField.getText().isEmpty() ||
-                    ModifierdateField.getText().isEmpty()) {
+            // Check for null or empty values
+            if (newNom.isEmpty() || newPrenom.isEmpty() || salaireField.getText().isEmpty() ||
+                    numeroField.getText().isEmpty() || matchField.getText().isEmpty() ||
+                    butsField.getText().isEmpty() || posteField.getText().isEmpty() ||
+                    dateField.getText().isEmpty()) {
                 showAlert("Erreur de saisie", "Veuillez remplir tous les champs.");
                 return;
             }
 
             try {
-                newSalaire = Double.parseDouble(ModifiersalaireField.getText());
-                newNumero = Integer.parseInt(ModifiernumeroField.getText());
-                newMatchs = Integer.parseInt(ModifiermatchField.getText());
-                newButs = Integer.parseInt(ModifierbutsField.getText());
-                newPoste = ModifierposteField.getText();
-                newDateNaissance = Date.valueOf(ModifierdateField.getText());
+                newSalaire = Double.parseDouble(salaireField.getText());
+                newNumero = Integer.parseInt(numeroField.getText());
+                newMatchs = Integer.parseInt(matchField.getText());
+                newButs = Integer.parseInt(butsField.getText());
+                newPoste = posteField.getText();
+                newDateNaissance = Date.valueOf(dateField.getText());
             } catch (NumberFormatException e) {
                 showAlert("Erreur de saisie", "Les valeurs numériques doivent être valides.");
                 return;
             }
 
-            // maj joueur avec nouvelles valeurs
             joueur.setNom(newNom);
             joueur.setPrenom(newPrenom);
             joueur.setSalaire(newSalaire);
@@ -320,28 +279,32 @@ public class JoueurController {
             joueur.setPoste(newPoste);
             joueur.setDateNaissance(newDateNaissance);
 
-            // maj eqipe joueur
-            String equipeName = ModifierequipeComboBox.getSelectionModel().getSelectedItem().toString();
-            Equipe equipe = equipeService.findByName(equipeName);
-            joueur.setEquipe(equipe);
+            String equipeName = equipeComboBox.getSelectionModel().getSelectedItem().toString();
+            Equipe newEquipe = equipeService.findByName(equipeName);
+            joueur.setEquipe(newEquipe);
 
-            // save joueur
             joueurService.update(joueur);
-
-            // rafraichir
+            joueurTable.getSelectionModel().clearSelection();
             joueurTable.refresh();
 
-            // Clear the fields
-            ModifiernomField.clear();
-            ModifierprenomField.clear();
-            ModifiersalaireField.clear();
-            ModifiernumeroField.clear();
-            ModifiermatchField.clear();
-            ModifierbutsField.clear();
-            ModifierposteField.clear();
-            ModifierdateField.clear();
-            ModifierequipeComboBox.getSelectionModel().clearSelection();
+            nomField.clear();
+            prenomField.clear();
+            salaireField.clear();
+            numeroField.clear();
+            matchField.clear();
+            butsField.clear();
+            posteField.clear();
+            dateField.clear();
         }
+
+        nomField.clear();
+        prenomField.clear();
+        salaireField.clear();
+        numeroField.clear();
+        matchField.clear();
+        butsField.clear();
+        posteField.clear();
+        dateField.clear();
     }
 
     private void showAlert(String title, String message) {
