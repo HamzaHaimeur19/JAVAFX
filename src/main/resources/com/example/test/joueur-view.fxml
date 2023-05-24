@@ -9,7 +9,7 @@
 <?import java.lang.String?>
 <HBox alignment="CENTER" prefHeight="259.0" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.test.JoueurController">
-
+    <Button fx:id="goToEquipe" text="Liste des equipes" onAction="#EquipeHandler"/>
     <VBox alignment="CENTER" spacing="20">
         <GridPane alignment="CENTER" hgap="10" vgap="10">
             <Label text="Ajouter/Modifier" style="-fx-font-size: 24px; -fx-font-weight: bold;" GridPane.columnIndex="0"
@@ -57,9 +57,10 @@
                 <TableColumn fx:id="updateButtonColumn" text="Selectionner"/>
             </columns>
         </TableView>
-        <Button fx:id="goToEquipe" text="Liste des equipes" onAction="#EquipeHandler"/>
-        <Button fx:id="exporter" text="exporter" onAction="#exporter" />
-        <Button fx:id="importer" text="importer" onAction="#importer" />
+        <Button fx:id="exporter" text="exporter texte" onAction="#exporter" />
+        <Button fx:id="importer" text="importer texte" onAction="#importer" />
+        <Button fx:id="exporterExcel" text="exporter excel" onAction="#exporterExcel" />
+        <Button fx:id="importerExcel" text="importer excel" onAction="#importerExcel" />
 
     </VBox>
 </HBox>

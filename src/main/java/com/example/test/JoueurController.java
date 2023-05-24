@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.ParseException;
 import java.util.List;
 
 public class JoueurController {
@@ -322,25 +323,58 @@ public class JoueurController {
     }
 
 
-
     @FXML
     void importer() throws IOException {
         JoueurService joueurService = new JoueurService();
         List<Joueur> importedPlayers = joueurService.importDataText("./resources/inputData.txt");
+
+        // Clear the existing items in joueurTable
+        joueurTable.getItems().clear();
+
+        // Add the imported players to joueurTable
         joueurTable.getItems().addAll(importedPlayers);
+
+        // Refresh the table view
         joueurTable.refresh();
 
+        showSuccessAlert("Donness importés avec succés ver fichier texte!");
     }
+
     @FXML
     void exporter() throws IOException {
         JoueurService joueurService = new JoueurService();
         joueurService.exportDataToTextFile("./resources/inputData.txt");
+        showSuccessAlert("Donness exportés avec succés vers fichier texte!");
+
+    }
+
+    @FXML
+    void importerExcel() throws IOException, ParseException {
+        JoueurService joueurService = new JoueurService();
+        joueurService.importDataExcel("./resources/inputDataExcel.xlsx");
+        showSuccessAlert("Donness importés avec succés de fichier excel!");
+
+    }
+
+    @FXML
+    void exporterExcel() throws IOException {
+        JoueurService joueurService = new JoueurService();
+        joueurService.exportDataToExcel("./resources/inputDataExcel.xlsx");
+        showSuccessAlert("Donness exportés avec succés vers fichier excel!");
 
     }
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showSuccessAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
