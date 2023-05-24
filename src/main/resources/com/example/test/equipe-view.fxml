@@ -13,11 +13,11 @@
 
     <GridPane alignment="CENTER" hgap="10" vgap="10">
         <VBox spacing="10">
-            <Label text="Ajouter/Modifier Equipe" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Label text="Ajouter" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
             <Label text="Nom Equipe:"/>
             <TextField fx:id="nomField"/>
             <HBox spacing="10">
-                <Button text="Ajouter/Modifier" onAction="#ajouterEquipe" />
+                <Button text="Ajouter" onAction="#ajouterEquipe" />
                 <Button text="Annuler" onAction="#AnnulerEquipe" />
             </HBox>
         </VBox>
@@ -29,8 +29,6 @@
         <columns>
             <TableColumn fx:id="columnEquipeId" text="ID"/>
             <TableColumn fx:id="columnEquipeNom" text="Nom"/>
-            <TableColumn fx:id="deleteButtonColumn" text="Supprimer"/>
-            <TableColumn fx:id="updateButtonColumn" text="Selectionner"/>
         </columns>
     </TableView>
     <Button fx:id="goToJoueur" text="Liste des joueurs" onAction="#navigateToJoueur" />

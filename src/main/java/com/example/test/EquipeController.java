@@ -1,25 +1,23 @@
 package com.example.test;
 
+import com.example.test.HelloApplication;
 import com.example.test.entities.Equipe;
-import com.example.test.entities.Joueur;
 import com.example.test.service.EquipeService;
-import com.example.test.service.JoueurService;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
 
 public class EquipeController {
+
     @FXML
     private Label welcomeText;
 
@@ -35,20 +33,31 @@ public class EquipeController {
     @FXML
     private TextField nomField;
 
-    @FXML
-    private TableColumn<Equipe, Void> deleteButtonColumn;
-    @FXML
-    private TableColumn<Equipe, Void> updateButtonColumn;
-
     EquipeService equipeService = new EquipeService();
-    public void initialize() {
-        EquipeService equipeService = new EquipeService();
 
+    public void initialize() {
         // Set the selection mode to SINGLE
         equipeTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
         // colonnes des tables
         columnEquipeId.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
         columnEquipeNom.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNomEquipe()));
+
+        // Enable editing for the columnEquipeNom
+        equipeTable.setEditable(true);
+        columnEquipeNom.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnEquipeNom.setOnEditCommit(event -> {
+            Equipe equipe = event.getRowValue();
+            String newNom = event.getNewValue().trim();
+
+            if (newNom.isEmpty()) {
+                showAlert("Nom d'équipe requis");
+                return;
+            }
+
+            equipe.setNomEquipe(newNom);
+            equipeService.update(equipe);
+        });
 
         // fixer la taille des colonnes
         equipeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -57,6 +66,8 @@ public class EquipeController {
         List<Equipe> equipeList = equipeService.findAll();
         equipeTable.getItems().addAll(equipeList);
 
+        // Add the "Supprimer" button column
+        TableColumn<Equipe, Void> deleteButtonColumn = new TableColumn<>("Supprimer");
         deleteButtonColumn.setCellFactory(param -> new TableCell<>() {
             private final Button deleteButton = new Button("Supprimer");
 
@@ -77,31 +88,9 @@ public class EquipeController {
                     setGraphic(deleteButton);
                 }
             }
-
-
         });
 
-        updateButtonColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button updateButton = new Button("Selectionner");
-
-            {
-                updateButton.setOnAction(event -> {
-                    Equipe equipe = getTableView().getItems().get(getIndex());
-                    nomField.setText(equipe.getNomEquipe());
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(updateButton);
-                }
-            }
-        });
-
+        equipeTable.getColumns().add(deleteButtonColumn);
     }
 
     @FXML
@@ -120,6 +109,15 @@ public class EquipeController {
             return;
         }
 
+        // Check if the equipe already exists
+        boolean equipeExists = equipeTable.getItems().stream()
+                .anyMatch(equipe -> equipe.getNomEquipe().equalsIgnoreCase(nom));
+
+        if (equipeExists) {
+            showAlert("L'équipe existe déjà");
+            return;
+        }
+
         Equipe equipe = equipeTable.getSelectionModel().getSelectedItem();
 
         if (equipe == null) {
@@ -127,38 +125,16 @@ public class EquipeController {
             equipeService.save(equipe);
             equipeTable.getItems().add(equipe);
         } else {
-            String newNom = nomField.getText().trim();
-
-            if (newNom.isEmpty()) {
-                showAlert("Nom d'équipe requis");
-                return;
-            }
-
-            equipe.setNomEquipe(newNom);
+            equipe.setNomEquipe(nom);
             equipeService.update(equipe);
             equipeTable.getSelectionModel().clearSelection();
-            equipeTable.refresh();
-
         }
 
         nomField.clear();
-
-    }
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Avertissement");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.setAlwaysOnTop(true);
-        stage.toFront();
-
-        alert.showAndWait();
     }
 
     @FXML
-    void AnnulerEquipe(){
+    void AnnulerEquipe() {
         nomField.clear();
     }
 
@@ -184,4 +160,16 @@ public class EquipeController {
         }
     }
 
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Avertissement");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
+        stage.toFront();
+
+        alert.showAndWait();
+    }
 }

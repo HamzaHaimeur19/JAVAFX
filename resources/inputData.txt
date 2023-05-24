@@ -1,1 +1,4 @@
-DD | DDOO | 12.0 | 12 | 1200 | 12 | DD | BARCALONA FC | 11/12/2001
+TT | TT | 3.0 | 2 | 1290 | 2 | G | Barca | 11/12/2001
+YYY | FF | 2.0 | 1 | 290 | 6 | H | Barcelona | 11/12/2001
+YYYpp | FFkkk | 2.0 | 1 | 290 | 6 | H | Barcelona | 11/12/2001
+c
