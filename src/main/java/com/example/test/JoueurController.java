@@ -307,6 +307,19 @@ public class JoueurController {
         dateField.clear();
     }
 
+    @FXML
+    void annulerJoueur(){
+        nomField.clear();
+        prenomField.clear();
+        salaireField.clear();
+        numeroField.clear();
+        matchField.clear();
+        butsField.clear();
+        posteField.clear();
+        dateField.clear();
+
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

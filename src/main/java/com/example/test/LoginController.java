@@ -62,4 +62,10 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void cancelButtonClicked(){
+        emailField.clear();
+        passwordField.clear();
+    }
 }

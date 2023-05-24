@@ -34,6 +34,7 @@
             <Label text="Date de naissance:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
             <TextField  promptText="aaaa-MM-dd" fx:id="dateField" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
             <Button text="Ajouter/Modifier" GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2" onAction="#addJoueur"/>
+            <Button text="Annuler" GridPane.columnIndex="1" GridPane.rowIndex="10" GridPane.columnSpan="2" onAction="#annulerJoueur"/>
         </GridPane>
     </VBox>
 

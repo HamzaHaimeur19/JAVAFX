@@ -158,6 +158,11 @@ public class EquipeController {
     }
 
     @FXML
+    void AnnulerEquipe(){
+        nomField.clear();
+    }
+
+    @FXML
     private void deconnexion() {
         try {
             // Load the LoginView.fxml file

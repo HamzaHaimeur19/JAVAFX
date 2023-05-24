@@ -16,9 +16,11 @@
             <Label text="Ajouter/Modifier Equipe" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
             <Label text="Nom Equipe:"/>
             <TextField fx:id="nomField"/>
-            <Button text="Ajouter/Modifier" onAction="#ajouterEquipe" />
+            <HBox spacing="10">
+                <Button text="Ajouter/Modifier" onAction="#ajouterEquipe" />
+                <Button text="Annuler" onAction="#AnnulerEquipe" />
+            </HBox>
         </VBox>
-
     </GridPane>
 
     <Label fx:id="welcomeText"/>
