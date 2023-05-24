@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
@@ -308,7 +309,7 @@ public class JoueurController {
     }
 
     @FXML
-    void annulerJoueur(){
+    void annulerJoueur() {
         nomField.clear();
         prenomField.clear();
         salaireField.clear();
@@ -317,6 +318,23 @@ public class JoueurController {
         butsField.clear();
         posteField.clear();
         dateField.clear();
+
+    }
+
+
+
+    @FXML
+    void importer() throws IOException {
+        JoueurService joueurService = new JoueurService();
+        List<Joueur> importedPlayers = joueurService.importDataText("./resources/inputData.txt");
+        joueurTable.getItems().addAll(importedPlayers);
+        joueurTable.refresh();
+
+    }
+    @FXML
+    void exporter() throws IOException {
+        JoueurService joueurService = new JoueurService();
+        joueurService.exportDataToTextFile("./resources/inputData.txt");
 
     }
 

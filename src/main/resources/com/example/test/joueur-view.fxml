@@ -58,5 +58,8 @@
             </columns>
         </TableView>
         <Button fx:id="goToEquipe" text="Liste des equipes" onAction="#EquipeHandler"/>
+        <Button fx:id="exporter" text="exporter" onAction="#exporter" />
+        <Button fx:id="importer" text="importer" onAction="#importer" />
+
     </VBox>
 </HBox>
