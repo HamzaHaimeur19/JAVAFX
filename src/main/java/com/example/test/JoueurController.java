@@ -326,10 +326,27 @@ public class JoueurController {
     @FXML
     void importer() throws IOException {
         JoueurService joueurService = new JoueurService();
-        List<Joueur> importedPlayers = joueurService.importDataText("./resources/inputData.txt");
+        List<Joueur> importedPlayers = joueurService.importDataText("./resources/inputData.txt"); // Pass null as updated player initially
 
         // Clear the existing items in joueurTable
         joueurTable.getItems().clear();
+
+        for (Joueur joueur : importedPlayers) {
+            boolean playerExists = joueurService.findAll().stream()
+                    .anyMatch(joueurObj -> joueurObj.getNom().equalsIgnoreCase(joueur.getNom())
+                            && joueurObj.getPrenom().equalsIgnoreCase(joueur.getPrenom()));
+
+            if (playerExists) {
+                // Player already exists, update the player in the database
+                joueurService.update(joueur);
+            } else {
+                // Player doesn't exist, save the player as a new entry in the database
+                joueurService.save(joueur);
+            }
+        }
+
+        // Retrieve the updated players from the database
+        importedPlayers = joueurService.findAll();
 
         // Add the imported players to joueurTable
         joueurTable.getItems().addAll(importedPlayers);
@@ -337,8 +354,9 @@ public class JoueurController {
         // Refresh the table view
         joueurTable.refresh();
 
-        showSuccessAlert("Donness importés avec succés ver fichier texte!");
+        showSuccessAlert("Données importées avec succès depuis le fichier texte !");
     }
+
 
     @FXML
     void exporter() throws IOException {

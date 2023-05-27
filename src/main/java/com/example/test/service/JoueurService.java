@@ -49,7 +49,7 @@ public class JoueurService {
     }
 
     // méthode pour extraire données à partir du fichier inputData.txt
-    public List<Joueur> exportDataText(String filePath) throws IOException {
+    public List<Joueur> exportDataText(String filePath, Joueur updatedPlayer) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         List<Joueur> importedPlayers = new ArrayList<>();
         String readLine = br.readLine();
@@ -58,14 +58,25 @@ public class JoueurService {
         // Read data from the text file
         while (readLine != null) {
             String[] joueurData = readLine.split("\\|");
-            String nom = joueurData[0].trim();
-            String prenom = joueurData[1].trim();
+            if (joueurData.length >= 9) {
+                String nom = joueurData[0].trim();
+                String prenom = joueurData[1].trim();
 
-            // Check if the player exists in the database already
-            boolean playerExists = joueurDao.findAll().stream()
-                    .anyMatch(joueurObj -> joueurObj.getNom().equalsIgnoreCase(nom) && joueurObj.getPrenom().equalsIgnoreCase(prenom));
+                if (updatedPlayer != null && nom.equalsIgnoreCase(updatedPlayer.getNom()) && prenom.equalsIgnoreCase(updatedPlayer.getPrenom())) {
+                    // Update the player's data
+                    joueurData[2] = String.valueOf(updatedPlayer.getSalaire());
+                    joueurData[3] = String.valueOf(updatedPlayer.getNumero());
+                    joueurData[4] = String.valueOf(updatedPlayer.getMatchs());
+                    joueurData[5] = String.valueOf(updatedPlayer.getButs());
+                    joueurData[6] = updatedPlayer.getPoste();
+                    joueurData[7] = updatedPlayer.getEquipe().getNomEquipe();
+                    joueurData[8] = dateFormat.format(updatedPlayer.getDateNaissance());
 
-            if (!playerExists) {
+                    // Join the updated data back into a line
+                    readLine = String.join("|", joueurData);
+                }
+
+                // Create a new Joueur object and add it to the importedPlayers list
                 Joueur j = new Joueur();
                 j.setNom(nom);
                 j.setPrenom(prenom);
@@ -74,18 +85,17 @@ public class JoueurService {
                 j.setMatchs(Integer.parseInt(joueurData[4].trim()));
                 j.setButs(Integer.parseInt(joueurData[5].trim()));
                 j.setPoste(joueurData[6].trim());
-
                 Equipe equipe = equipeDaoImp.findByName(joueurData[7].trim());
                 j.setEquipe(equipe);
-
                 try {
                     Date dateNaissance = dateFormat.parse(joueurData[8].trim());
                     j.setDateNaissance(dateNaissance);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
                 importedPlayers.add(j);
+            } else {
+                System.out.println("Invalid data format: " + readLine);
             }
 
             readLine = br.readLine();
@@ -106,10 +116,23 @@ public class JoueurService {
     public List<Joueur> importDataText(String filePath) throws IOException {
         clearDatabase();
         JoueurService joueurService = new JoueurService();
-        List<Joueur> importedPlayers = exportDataText(filePath);
+        List<Joueur> importedPlayers = exportDataText(filePath, null);
+
+        // Iterate over the imported players
         for (Joueur joueur : importedPlayers) {
-            joueurService.save(joueur); // Save the imported player to the database
+            boolean playerExists = joueurService.findAll().stream()
+                    .anyMatch(joueurObj -> joueurObj.getNom().equalsIgnoreCase(joueur.getNom())
+                            && joueurObj.getPrenom().equalsIgnoreCase(joueur.getPrenom()));
+
+            if (playerExists) {
+                // Player already exists, update the player in the database
+                joueurService.update(joueur);
+            } else {
+                // Player doesn't exist, save the player as a new entry in the database
+                joueurService.save(joueur);
+            }
         }
+
         return importedPlayers;
     }
 

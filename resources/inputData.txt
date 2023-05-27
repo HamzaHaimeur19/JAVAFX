@@ -1,4 +1,4 @@
-TT | TT | 3.0 | 2 | 1290 | 2 | G | Barca | 11/12/2001
-YYY | FF | 2.0 | 1 | 290 | 6 | H | Barcelona | 11/12/2001
-YYYpp | FFkkk | 2.0 | 1 | 290 | 6 | H | Barcelona | 11/12/2001
-c
+Hamza | Haimeur | 1222.0 | 12 | 112 | 3 | DD | Barcalona | 11/12/2001
+Hatim | ggg | 200.0 | 22 | 12 | 23 | FFF | fff | 11/12/2001
+Yassine | ddd | 300.0 | 12 | 23 | 34 | DD | Barcalona | 11/12/2001
+Yassiness | dddss | 300.0 | 12 | 23 | 34 | DD | Barcalona | 11/12/2001
